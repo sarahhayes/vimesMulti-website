@@ -360,7 +360,7 @@ display: none;
 <div id="vimesmulti" class="section level2">
 <h2>vimesMulti</h2>
 <p>vimesMulti is a package for detecting disease outbreak clusters from
-temporal and spatial suveillance data using group-specific
+temporal and spatial surveillance data using group-specific
 epidemiological parameters. There are four basic functions within the
 package. This vignette illustrates a basic workflow.</p>
 <p>Load the package</p>
@@ -437,9 +437,9 @@ spatial_cut_off &lt;- get_quantiles_multi(d_type = &quot;spatial&quot;, distrib 
 
 spatial_cut_off</code></pre>
 <pre><code>##   trans_type threshold_spatial proportion_sim_spatial
-## 1       g1g1          2.273982              0.3602943
-## 2      mixed          2.269719              0.4798702
-## 3       g2g2          2.267165              0.1598355</code></pre>
+## 1       g1g1          2.268846              0.3599259
+## 2      mixed          2.269791              0.4799435
+## 3       g2g2          2.271832              0.1601306</code></pre>
 <p>Alternatively, if the user already has the values they wish to use
 for the cut-off values, they can be manually specified using
 <em>set_cut_off</em>. When manually entering spatial cut-off values,
@@ -463,11 +463,12 @@ dat_geo2 &lt;- c(8850794, 8864207, 8861898, 8862102, 8854782, 8864586, 8853986, 
 set.seed(26)
 group_vect &lt;- sample(c(rep(&quot;g1&quot;, 30), rep(&quot;g2&quot;, 20)))</code></pre>
 <p>Use the <em>vimes_multi</em> function to generate the clusters. The
-user will input: * The temporal data (dat_time) for each case. This
-should be entered as a numeric to allow computation of the distance
-matrix. Unit does not need to be specified but must be the same for all
-entries.</p>
+user will input:</p>
 <ul>
+<li><p>The temporal data (dat_time) for each case. This should be
+entered as a numeric to allow computation of the distance matrix. Unit
+does not need to be specified but must be the same for all
+entries.</p></li>
 <li><p>The spatial data (dat_geo_1 and dat_geo_2) for each case. The
 package uses <em>rdist</em> from the fields package to calculate
 euclidean distance, thus locations should be entered in Universtal
@@ -491,9 +492,9 @@ generated using <em>get_quantiles_multi</em> or
 type from the data clusters and from the original simulation</p>
 <pre class="r"><code>vimes_multi_results$combined_results</code></pre>
 <pre><code>##   trans_type sim_proportion data_count data_proportion sim_count
-## 1       g1g1      0.3602032         18       0.4615385        14
-## 2      mixed      0.4798390         16       0.4102564        19
-## 3       g2g2      0.1599577          5       0.1282051         6</code></pre>
+## 1       g1g1      0.3600317         18       0.4615385        14
+## 2      mixed      0.4799955         16       0.4102564        19
+## 3       g2g2      0.1599728          5       0.1282051         6</code></pre>
 <p>Summary table of size and composition of clusters of two or more.</p>
 <pre class="r"><code>vimes_multi_results$cluster_size_df</code></pre>
 <pre><code>## # A tibble: 8 × 5
@@ -566,7 +567,12 @@ axis(side = 1, at = seq(0.5,max(vimes_multi_results_manual$vimes_results_list$cl
 <p>The assortativity parameter sets the degree of assortative
 transmission. In the example above, we have set it to 1, which reflects
 random transmission between groups. Higher values will reflect more
-assortative transmission.</p>
+assortative transmission. There is no upper limit for the assortativity
+parameter set within the package. Thus, when the level of assortative
+transmission in unknown, the user may wish to enter a range of values
+for the assortativity parameter and assess the clusters produced to
+evaluate which values generate estimates most consistent with their
+data.</p>
 <pre class="r"><code>temporal_cut_off_assort3 &lt;- get_quantiles_multi(d_type = &quot;temporal&quot;, distrib = &quot;lognormal&quot;,
                      obs = c(g1_obs, g2_obs), rr = c(g1_rr, g2_rr),
                      params = params_temporal,
@@ -584,9 +590,9 @@ of ‘mixed’ transmissions (between-group transmission) is lower when the
 assortativity parameter is set at a higher value</p>
 <pre class="r"><code>temporal_cut_off</code></pre>
 <pre><code>##   trans_type threshold_temporal proportion_sim_temporal
-## 1       g1g1           157.2897               0.3601121
-## 2      mixed           186.0433               0.4798079
-## 3       g2g2           246.4299               0.1600800</code></pre>
+## 1       g1g1           157.0219               0.3601375
+## 2      mixed           186.1527               0.4800476
+## 3       g2g2           246.7537               0.1598150</code></pre>
 <pre class="r"><code>temporal_cut_off_assort3</code></pre>
 <pre><code>##   trans_type threshold_temporal proportion_sim_temporal
 ## 1       g1g1           126.5646               0.5135088
@@ -594,9 +600,9 @@ assortativity parameter is set at a higher value</p>
 ## 3       g2g2           334.9332               0.3132963</code></pre>
 <pre class="r"><code>spatial_cut_off</code></pre>
 <pre><code>##   trans_type threshold_spatial proportion_sim_spatial
-## 1       g1g1          2.273982              0.3602943
-## 2      mixed          2.269719              0.4798702
-## 3       g2g2          2.267165              0.1598355</code></pre>
+## 1       g1g1          2.268846              0.3599259
+## 2      mixed          2.269791              0.4799435
+## 3       g2g2          2.271832              0.1601306</code></pre>
 <pre class="r"><code>spatial_cut_off_assort3</code></pre>
 <pre><code>##   trans_type threshold_spatial proportion_sim_spatial
 ## 1       g1g1          2.083237              0.5135143
@@ -604,7 +610,7 @@ assortativity parameter is set at a higher value</p>
 ## 3       g2g2          2.533498              0.3134663</code></pre>
 <p>Changes in the cut-off values that occur as a result of changes to
 the assortativity parameter will affect the composition of clusters. If
-we rerun the script above with the new values we produced the clusters
+we rerun the script above with the new values we produce the clusters
 shown below. The size of the largest cluster has increased from 9 to 10
 and there is a change to the composition of the clusters of 2.</p>
 <pre><code>## # A tibble: 9 × 5
